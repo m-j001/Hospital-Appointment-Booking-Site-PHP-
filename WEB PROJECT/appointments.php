@@ -1,0 +1,762 @@
+
+<?php
+include("connection.php");
+session_start();
+
+
+if(!isset($_SESSION['user'])){
+header(header: "Location: index.php");
+
+}
+
+$email = $_SESSION['user'];
+
+
+$select = "SELECT * FROM `patients` WHERE email = '$email' LIMIT 1";
+   $result = mysqli_query($conn, $select);
+   $user = mysqli_fetch_assoc($result);
+
+
+   $name = $user["firstname"];
+   $name2 = $user["lastname"];
+   $fullname = ("$name" . "." . "$name2");
+   $_SESSION['phonenum'] = $user["phone_number"];
+
+   $email = $user["email"];
+
+   //echo "$name";
+   //echo "$email";
+
+
+   $conn->close();
+
+
+
+
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <title>BrownCadbuss Hospitals</title>
+  
+  <style>
+
+.container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+  }
+  .logow {
+    display: inline-block;
+    color: white;
+    font-size: 19px;
+    font-weight: 100;
+    
+    font-family: Copperplate, Papyrus, fantasy;
+    /font-family: "Lucida Console", "Courier New", monospace;
+    padding: 0px;
+    position: relative;
+    right: 120px;
+    /top: 4px;
+    bottom: 5px;
+    z-index: 1;
+    text-align: left;
+  }
+  .nav1 {
+    position: relative;
+    left: 0px;
+    top: 0px;
+    background-color: #17212B; 
+    height: 69px;
+    right: 0;
+    text-align: center;
+  }
+  .img0 {
+    text-align: center;
+    width: 17%;
+    display: inline-block;
+    position: relative;
+    /left: 1px;
+    /top: 10px;
+    height: 52px;
+    right: 120px;
+  }
+  .hoslogo {
+    text-align: center;
+    width: 20%;
+    display: inline-block;
+    position: relative;
+    /left: 1px;
+    top: 10px;
+    height: 52px;
+    right: 390px;
+  }
+ 
+  .navfoot2 {
+    position: relative;
+    left: 0px;
+    top: 230px;
+    bottom: 0px;
+    background-color: #17212B; 
+    height: 150px;
+    right: 0;
+    text-align: center;
+  }
+
+    *,*:before,*:after {
+	box-sizing: border-box;
+}
+
+:after {
+	content: "";
+}
+
+section {
+  position: relative;
+  left: 60px;
+  bottom: 70px;
+}
+
+h1 { 
+  margin:80px 0 10px 0;
+  font-size: 32px;
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 0px #17212B,
+	2px 2px 0px #17212B,
+	3px 3px 0px #17212B,
+	4px 4px 0px #17212B;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+body {
+  padding: 100px 0;
+	background: lightblue;
+  color: white;
+  max-width:640px;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 14px;
+  line-height:1.4;
+  font-smoothing: anti-aliased;
+}
+
+nav {
+  float: left;
+	position: relative;
+	top: 0;
+  left: 0;
+	background: transparent;
+}
+
+nav ul {
+	text-align: center;
+}
+
+nav ul li {
+	position: relative;
+  width: 70px;
+  cursor: pointer;
+	background: #17212B;
+	text-transform: uppercase;
+	transition:all .4s ease-out;
+}
+
+nav ul li:after {
+	position: absolute;
+	background: white;
+	color: #17212B;
+	top:0;
+	left: 70px;
+	width: 70px; height: 100%;
+  opacity:.5;
+  transform: perspective(400px) rotateY(90deg);
+	transform-origin: 0 100%;
+	transition:all .4s ease-out;
+}
+
+nav ul li:nth-child(1):after { 
+	content: "Home";
+	line-height: 85px;
+    font-size: 8px;
+    font-weight: bold;
+}
+nav ul li:nth-child(2):after { 
+	content: "Profile";
+	line-height: 85px;
+    font-size: 8px;
+    font-weight: bold;
+}
+nav ul li:nth-child(3):after { 
+	content: "Book An Appointment";
+	line-height: 43px;
+    font-size: 8px;
+    font-weight: bold;
+}
+nav ul li:nth-child(4):after { 
+	content: "My Appointments";
+	line-height: 35px;
+    font-size: 8px;
+    font-weight: bold;
+}
+
+nav ul li:hover {
+	transform: translateX(-70px);
+}
+
+nav ul li:hover:after {
+  opacity: 1;
+	transform: perspective(400px) rotateY(0deg) scale(1) ;
+}
+
+
+nav ul li > div {
+	display: inline-block;
+	padding: 25px 0;
+	background: transparent;
+}
+
+nav ul li div { position: relative; }
+
+.roof {
+	width: 0;
+	height: 0;
+	top:2px;
+	border-style: solid;
+	border-width: 0 21px 15px 21px;
+	border-color: transparent transparent #ffffff transparent;
+}
+
+.roof-edge {
+	position: absolute;
+	z-index: 20;
+	left: -17px;
+	top: 3px;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 0 17px 12px 17px;
+	border-color: transparent transparent #17212B transparent;
+}
+/*white triangle over red triangle*/
+.roof-edge:after {
+	position: absolute;
+	left: -14.5px;
+	top: 3px;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 0 14.5px 10px 14.5px;
+	border-color: transparent transparent white transparent;
+}
+
+.front {
+	position: relative;
+	top: 3px;
+	width: 28.5px;
+	height: 20px;
+	margin: 0 auto;
+	background: white;
+}
+/*door*/
+.front:after {
+	position: absolute;
+	background: #17212B;
+	width: 11px;
+	height: 13px;
+	bottom: 0;
+	left:9px;
+}
+
+/*/// About me ////*/
+
+.head {
+	width: 32px;
+	height: 35px;
+	background: white;
+	border-radius:8px;
+}
+/*mouth*/
+.head:after {
+	width: 4px;
+	height: 10px;
+	background: white;
+	position: absolute;
+	border-radius:4px 0 0 4px;
+	top:21px;
+	left: 14px;
+	transform:rotate(270deg);
+}
+
+.eyes {
+	width: 8px;
+	height: 5px;
+	border-radius: 50%;
+	position: absolute;
+	top: 10px;
+	left: 5px;
+	background: #17212B;
+}
+/*right eye*/
+.eyes:after {
+	width: 8px;
+	height: 5px;
+	border-radius: 50%;
+	position: absolute;
+	top: 0;
+	left: 14px;
+	background: #17212B;
+}
+
+.beard {
+	width: 32px;
+	height: 17px;
+	background: #17212B;
+	border:2px solid white;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	border-radius:0 0 8px 8px;
+}
+/*nose*/
+.beard:after {
+	position: absolute;
+	top:-2px;
+	left: 11px;
+	background: white;
+	width:6px;
+	height: 4px;
+	border-left:1px solid #17212B;
+	border-right:1px solid #17212B;
+}
+
+/*//work//*/
+
+.paper {
+	position: relative;
+	height:32px;
+	width: 29px;
+	background: white;
+	border:2px solid white;
+}
+
+/*window*/
+.paper:after {
+	position: absolute;
+	top:1px;
+	left: 0;
+	width: 25px;
+	height: 29px;
+	background: white;
+	border-top:4px solid #17212B;
+}
+
+.lines {
+	position: absolute;
+	top: 36px;
+	left: 5px;
+	width: 11px;
+	box-shadow: 0 0 0 1px #17212B;
+}
+
+.lines:after {
+	position: absolute;
+	top: 4px;
+	left: 3px;
+	width: 14px;
+	box-shadow: 0 0 0 1px #17212B;
+}
+
+.lines:nth-child(2) {
+	position: absolute;
+	top: 44px;
+	left: 8px;
+	width: 11px;
+}
+
+.lines:nth-child(2):after {
+	position: absolute;
+	top: 4px;
+	left: -3px;
+	width: 11px;
+}
+
+.lines:nth-child(3) {
+	position: absolute;
+	top: 52px;
+	left: 8px;
+	width: 14px;
+}
+
+.lines:nth-child(3):after {
+	display: none;
+}
+
+/*//mail //*/
+
+.mail-base {
+	position: relative;
+	width: 32px;
+	height: 18px;
+	background: white;
+}
+
+.mail-top {
+	position: absolute;
+	z-index: 20;
+	left: 0;
+	top: 0;
+	width: 0;
+	height: 0;
+	transform: rotate(180deg);
+	border-style: solid;
+	border-width: 0 16px 11px 16px;
+	border-color: transparent transparent #17212B transparent;
+}
+
+.mail-top:after {
+	position: absolute;
+	z-index: 20;
+	left: -16px;
+	top: 3px;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 0 16px 9px 16px;
+	border-color: transparent transparent white transparent;
+}
+.formcontainer {
+    padding: 10px;
+    position: relative;
+    width: 40%;
+    left: 205px;
+    top: 0px;
+    height: 200px;
+    right: 0;
+    text-align: center;
+    form {border: 10px solid #f1f1f1;
+  padding: 20px;
+  height: 369px;
+  }
+  }
+  .container2 {
+	text-align: center;
+	 width: 40%;
+	 position: relative;
+	 left: 20%;
+	 color: #808080;
+	
+   }
+  
+  .label1 {
+     display: block;
+    color: white;
+    float: left;
+width: 100%;
+margin-left: 3em;
+text-align: left;
+position: relative;
+/top: 7px;
+font-size: 0.875em
+font-family: sans-serif;
+    
+  }
+
+.label2 {
+     display: block;
+    color: white;
+    float: left;
+width: 100%;
+/margin-left: 1em;
+text-align: left;
+position: relative;
+top: 13px;
+font-size: 0.875em
+font-family: sans-serif;
+    
+  }
+.input1 {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    box-sizing: border-box;
+    border: 2px solid white;
+    border-radius: 5px;
+    
+  }
+
+.input2 {
+    width: 100%;
+    padding: 6px 10px;
+    margin: 8px 0;
+    display: inline-block;
+    box-sizing: border-box;
+    border: 2px solid white;
+    border-radius: 5px;
+    
+  }
+  .fs-field {
+    /top: 150px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.375rem;
+  position: relative;
+right: 100%;
+
+ }  
+.fs-field1 {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.375rem;
+  position: relative;
+left: 50%;
+
+bottom: 85px;
+  }
+.fs-field2 {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.375rem;
+  position: relative;
+right: 100%;
+  }
+.fs-field3 {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.375rem;
+  position: relative;
+left: 50%;
+bottom: 85px;
+  }
+.fs-field4 {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.375rem;
+  position: relative;
+right: 100%;
+  }
+.fs-field5 {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.375rem;
+  position: relative;
+left: 50%;
+bottom: 85px;
+/width: 10%;
+  }
+.fs-field6 {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.375rem;
+  position: relative;
+left: 5%;
+bottom: 193px;
+  }
+  .fs-fit {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.375rem;
+  position: relative;
+right: 0%;
+
+  }
+  .fs-fit1 {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.375rem;
+  position: relative;
+right: 0%;
+bottom: 100px;
+  }
+  .fs-fit2 {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.375rem;
+  position: relative;
+right: 0%;
+bottom: 180px;
+  }
+  .but1 {
+   
+   background-color: #04AA6D;
+   color: white;
+   padding: 5px;
+   margin: 4px;
+   cursor: pointer;
+   width: 100%;
+   border: 2px solid white;
+   border-radius: 5px;
+ }
+ .nave {
+    /background-color:rgb(239, 123, 7); 
+    position: relative;
+    height: 29px;
+    width: 5%;
+    /top: 0px;
+    bottom: 32px;
+    left: 89%;
+    text-align: center;
+  }
+ 
+  
+
+    </style>
+  
+  </head>
+
+  <body>
+<div class="container">
+<div class="nav1">
+<div class="hoslogo">
+
+<img class="img0" src="\WEB PROJECT\images\pngegg.png">
+<span class="logow">BrownCadbuss <br> Hospitals</span>
+
+</div>
+<div class="nave">
+<form action="includes/logout.php" method="POST"> 
+  <input type="submit" value="Logout"> 
+</form> 
+  
+</div>
+
+
+</div>
+<nav>
+  <ul>
+    <li>
+      <div class="home-icon"><a href="dashboard.php">
+        <div class="roof">
+          <div class="roof-edge"></div>
+        </div>
+        <div class="front"></div></a>
+      </div>
+    </li>
+    <li>
+      <div class="about-icon">
+        <div class="head">
+          <div class="eyes"></div>
+          <div class="beard"></div>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="work-icon"><a href="appointments.php">
+        <div class="paper"></div>
+        <div class="lines"></div>
+        <div class="lines"> </div>
+        <div class="lines"></div></a>
+      </div>
+    </li>
+    <li>
+      <div class="mail-icon"><a href="myappointments.php">
+        <div class="mail-base">
+          <div class="mail-top"></div></a>
+        </div>
+      </div>
+    </li>
+  </ul>
+</nav>
+
+
+<div class="formcontainer">
+ 
+
+<form action="includes/bookappointmentsform.php" method="POST">
+  
+
+  <div class="container2">
+  <div class="fs-fit">
+<div class="fs-field">
+    <label for="specialty" class="label2"><b>Specialty</b></label>
+    <select id="specialty" placeholder="Select Specialty" name="specialty" class="input2">
+    <option value="select">select</option>
+    <option value="Dermatology(Skin)">Dermatology(Skin)</option>
+    <option value="Dentistry(Teeth)">Dentistry(Teeth)</option>
+    <option value="Psychiatry(mental)">Psychiatry(mental)</option>
+    <option value="Neurology(Brain)">Neurology(Brain)</option>
+    <option value="Orthopedics(Bones)">Orthopedics(Bones)</option>
+    <option value="Gynaecology(Fertility)">Gynaecology(Fertility)</option>
+    <option value="Cardiology(Heart)">Cardiology(Heart)</option>
+</select>
+</div>
+<div class="fs-field1">
+    <label for="insurance" class="label2"><b>Insurance</b></label>
+    <select id="insurance" placeholder="Select Insurance" name="insurance" class="input2">
+    <option value="select">select</option>
+    <option value="yes">Yes</option>
+    <option value="nil">Nil</option>
+
+</select>
+</div>
+</div>
+<div class="fs-fit1">
+<div class="fs-field2">
+    <label for="hosnum" class="label2"><b>Hos Number</b></label>
+    <input type="text" placeholder="Enter Hospital Number" name="hosnum" class="input2">
+</div>
+<div class="fs-field3">
+    <label for="doctor" class="label2"><b>Select Doctor</b></label>
+    <select id="doctor" placeholder="Select Doctor" name="doctor" class="input2">
+    <option value="select">select</option>
+    <option value="mike">mike</option>
+    <option value="johnson">johnson</option>
+    <option value="brian">brian</option>
+    <option value="divine">divine</option>
+    <option value="job">job</option>
+</select>
+
+</div>
+</div>
+
+<div class="fs-field6">  
+    <button type="submit" class="but1">Book Appointment</button>
+    </div>
+    
+  </div>
+
+  
+</form>
+</div>
+
+
+<div class="navfoot2">
+  
+</div>
+</div>
+
+
+
+</div>
+
+</body>
+</html>
+
+
